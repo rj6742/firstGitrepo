@@ -1,0 +1,128 @@
+package com.Bikkadit.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.PostRemove;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.Bikkadit.Exceptions.ResourceNotFoundException;
+import com.Bikkadit.Payloads.PostDto;
+import com.Bikkadit.Repository.CategoryRepo;
+import com.Bikkadit.Repository.PostRepo;
+import com.Bikkadit.Repository.UserRepo;
+import com.Bikkadit.model.Category;
+import com.Bikkadit.model.Post;
+import com.Bikkadit.model.User;
+
+@Service
+public class PostServiceImpl implements PostI{
+	
+	@Autowired
+	private PostRepo repo;
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
+	@Autowired
+	private UserRepo userrepo;
+	
+	@Autowired
+	private CategoryRepo categoryRepo;
+	
+	
+
+	@Override
+	public PostDto createpost(PostDto dto, Integer uid, Integer cid) {
+		
+		
+		User user = this.userrepo.findById(uid).orElseThrow(()-> new ResourceNotFoundException("User", "user id", uid));
+		
+		Category category=this.categoryRepo.findById(cid).orElseThrow(()-> new ResourceNotFoundException("category", "category id", cid));
+		
+		Post map = modelMapper.map(dto, Post.class);
+		map.setImagename("default.png");
+		map.setAddedDate(new Date());
+		map.setCategory(category);
+		map.setUser(user);
+		
+		
+		Post save = repo.save(map);
+		
+		
+				return modelMapper.map(save, PostDto.class);
+	}
+
+
+
+	@Override
+	public PostDto update(PostDto dto,Integer pid) {
+
+		
+		
+		
+		
+		return null;
+	}
+
+
+
+	@Override
+	public void deletePost(Integer pid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public List<PostDto> getAllPost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public PostDto getbyid(PostDto pid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+
+	@Override
+	public List<PostDto> searchpost(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<PostDto> getbycategory(Integer cid) {
+
+		
+		Category category = categoryRepo.findById(cid).orElseThrow(()-> new ResourceNotFoundException("category", "category id",cid));
+		List<Post> list = repo.findByCategory(category);
+		List<PostDto> collect = list.stream().map((post)->modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+		
+		
+		return collect;
+	}
+
+
+
+	@Override
+	public List<PostDto> getpostbyuser(Integer uid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
