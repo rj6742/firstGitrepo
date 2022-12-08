@@ -2587,3 +2587,4 @@ org.eclipse.core.runtime.CoreException: Could not resolve artifact io.springfox:
 2022-12-07 16:50:43,709 [Worker-70: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2022-12-07 16:50:43,709 [Worker-70: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
 2022-12-07 16:50:43,709 [Worker-70: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\rohit jadhav\Desktop\Blogging App\Blogging-App-Api\src\test\resources
+2022-12-08 12:30:45,689 [Worker-1: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
