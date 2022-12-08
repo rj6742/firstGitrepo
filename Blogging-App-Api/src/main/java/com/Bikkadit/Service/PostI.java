@@ -2,7 +2,10 @@ package com.Bikkadit.Service;
 
 import java.util.List;
 
+import javax.persistence.PostRemove;
+
 import com.Bikkadit.Payloads.PostDto;
+import com.Bikkadit.Payloads.PostResponce;
 import com.Bikkadit.model.Post;
 
 public interface PostI {
@@ -14,7 +17,7 @@ public interface PostI {
 	
 	void deletePost(Integer pid);
 	
-	List<PostDto> getAllPost();
+	PostResponce getAllPost(Integer pagenumber, Integer pagesize,String sortby,String sortdir);
 	
 	PostDto getbyid(Integer pid);
 	

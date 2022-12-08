@@ -11,10 +11,15 @@ import javax.persistence.PostRemove;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.Bikkadit.Exceptions.ResourceNotFoundException;
 import com.Bikkadit.Payloads.PostDto;
+import com.Bikkadit.Payloads.PostResponce;
 import com.Bikkadit.Repository.CategoryRepo;
 import com.Bikkadit.Repository.PostRepo;
 import com.Bikkadit.Repository.UserRepo;
@@ -96,13 +101,39 @@ public class PostServiceImpl implements PostI{
 
 
 	@Override
-	public List<PostDto> getAllPost() {
+	public PostResponce getAllPost(Integer pagenumber, Integer pagesize,String sortby,String sortdir ) {
+		
+		Sort sort=null;
+		if(sortdir.equalsIgnoreCase("ASC"))
+		{
+			sort=Sort.by(sortby).ascending();
+		}
+		else
+		{
+			sort=Sort.by(sortby).descending();
+		}
+		
+		Pageable p=PageRequest.of(pagenumber,pagesize,sort );
 
-		List<Post> all = repo.findAll();
+		 Page<Post> pagepost = repo.findAll(p);
+		 
+		 List<Post> content = pagepost.getContent();
+		 
+		 
+		 
+		List<PostDto> collect = content.stream().map((post)-> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+		PostResponce postresponce=new PostResponce();
+		postresponce.setContent(collect);
+		postresponce.setPageNumber(pagepost.getNumber());
+		postresponce.setPageSize(pagepost.getSize());
+		postresponce.setTotalElement(pagepost.getTotalElements());
+		postresponce.setTotalPages(pagepost.getTotalPages());
+		postresponce.setLastpage(pagepost.isLast());
 		
-		List<PostDto> collect = all.stream().map((post)-> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
 		
-		return collect;
+		
+		
+		return postresponce;
 	}
 
 
@@ -123,8 +154,11 @@ public class PostServiceImpl implements PostI{
 
 	@Override
 	public List<PostDto> searchpost(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<Post> posts = repo.searchbykeyword("%"+keyword+"%");
+		
+		List<PostDto> collect = posts.stream().map((post)->modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+		return collect;
 	}
 
 

@@ -21,7 +21,6 @@ public class CategoryserviceImpl implements CategoryI {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-
 	
 	@Override
 	public CategoryDto createCategory(CategoryDto categoryDto) {
